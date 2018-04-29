@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import MatTable from './MatTable';
+import SelectField from "material-ui/SelectField";
+import MenuItem from "material-ui/MenuItem";
+import TextField from "material-ui/TextField";
 import superagent from 'superagent';
+import orderBy from "lodash/orderBy";
 
 
 const headers = [
@@ -39,7 +43,9 @@ class Dashboard extends Component {
     constructor() {
         super()
         this.state = {
-            apidata: ''
+            apidata: '',
+            query: '',
+            columnToQuery: 'name'
         }
     }
 
@@ -71,13 +77,45 @@ class Dashboard extends Component {
     }
 
     render() {
+        const lowerCaseQuery = this.state.query.toLowerCase();
         if (this.state.apidata) {
             return (
                 <div>
-                    <MatTable
-                        headers={headers}
-                        data={this.state.apidata}
-                    />
+                    <div style={{ display: "flex" }}>
+                        <div style={{ display: "flex", margin: "auto" }}>
+                            <TextField
+                                floatingLabelText="Search"
+                                value={this.state.query}
+                                onChange={e => this.setState({ query: e.target.value })}
+                                floatingLabelFixed
+                            />
+                            <SelectField
+                                style={{ marginLeft: "1em" }}
+                                floatingLabelText="Column to search in"
+                                value={this.state.columnToQuery}
+                                onChange={(event, index, value) =>
+                                    this.setState({ columnToQuery: value })
+                                }
+                            >
+                                <MenuItem value="name" primaryText="Name" />
+                                <MenuItem value="email" primaryText="Email ID" />
+                            </SelectField>
+                        </div>
+                    </div>
+                    <div>
+                        <MatTable
+                            headers={headers}
+                            data={orderBy(
+                                this.state.query ?
+                                    this.state.apidata.filter(x =>
+                                        x[this.state.columnToQuery]
+                                            .toLowerCase()
+                                            .includes(lowerCaseQuery)
+                                    )
+                                    : this.state.apidata
+                            )}
+                        />
+                    </div>
                 </div>
             );
         } else {
