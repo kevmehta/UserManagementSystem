@@ -13,9 +13,10 @@ import { Link } from 'react-router-dom';
 
 
 const dateConverter = (date) => {
+    let monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     let tmp = new Date(date);
     let day = tmp.getDate();
-    let month = tmp.getMonth() + 1;
+    let month = monthArr[tmp.getMonth()];
     let year = tmp.getFullYear();
 
     if (day < 10) {
@@ -24,7 +25,7 @@ const dateConverter = (date) => {
     if (month < 10) {
         month = '0' + month;
     }
-    let dob = month + '/' + day + '/' + year;
+    let dob = day + ' ' + month + ' ' + year;
 
     return dob;
 }

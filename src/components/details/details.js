@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import FlatButton from 'material-ui/FlatButton';
 
 const dateConverter = (date) => {
+    let monthArr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     let tmp = new Date(date);
     let day = tmp.getDate();
-    let month = tmp.getMonth() + 1;
+    let month = monthArr[tmp.getMonth()];
     let year = tmp.getFullYear();
 
     if (day < 10) {
@@ -12,7 +15,7 @@ const dateConverter = (date) => {
     if (month < 10) {
         month = '0' + month;
     }
-    let dob = month + '/' + day + '/' + year;
+    let dob = day + ' ' + month + ' ' + year;
 
     return dob;
 }
@@ -47,6 +50,14 @@ class Details extends Component {
                     <label> Active: </label>
                     {user.active ? 'Active' : 'Inactive'}
                 </span>
+                <br />
+
+                <Link to={{ pathname: '/' }}>
+                    <FlatButton
+                        label="Back"
+                        primary={true}
+                    />
+                </Link>
             </div>
         );
 
