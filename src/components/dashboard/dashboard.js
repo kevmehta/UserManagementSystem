@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MatTable from './MatTable';
+import superagent from 'superagent';
 
 
 const headers = [
@@ -35,41 +36,55 @@ const headers = [
 
 class Dashboard extends Component {
 
-    state = {
-        data: [
-            {
-                name: "Paul Adam",
-                email: "paul.adam@abc.com",
-                phone: 1234567890,
-                dob: 271708200,
-                active: true
-            },
-            {
-                name: "Greg William",
-                email: "gregl.will@abc.com",
-                phone: 1234567890,
-                dob: 36087300,
-                active: false
-            },
-            {
-                name: "Charles Fernandes",
-                email: "charles@abc.com",
-                phone: 9221133547,
-                dob: 346357800,
-                active: true
-            }
-        ]
-    };
+    constructor() {
+        super()
+        this.state = {
+            apidata: ''
+        }
+    }
+
+    componentDidMount() {
+        const url = "https://api.myjson.com/bins/pkisp";
+
+        superagent
+            .get(url)
+            .query(null)
+            .set('Accept', 'application/json')
+            .end((error, response) => {
+                const dataFromApi = response.body;
+                const transformData = [];
+
+                dataFromApi.users.forEach(user => {
+                    transformData.push({
+                        name: user.first_name + ' ' + user.last_name,
+                        email: user.email,
+                        phone: user.phone,
+                        dob: user.dob,
+                        active: user.active
+                    });
+                });
+
+                this.setState({
+                    apidata: transformData
+                })
+            })
+    }
 
     render() {
-        return (
-            <div>
-                <MatTable
-                    headers={headers}
-                    data={this.state.data}
-                />
-            </div>
-        );
+        if (this.state.apidata) {
+            return (
+                <div>
+                    <MatTable
+                        headers={headers}
+                        data={this.state.apidata}
+                    />
+                </div>
+            );
+        } else {
+            return (
+                <div>Loading...</div>
+            );
+        }
 
     }
 

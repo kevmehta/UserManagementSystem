@@ -71,7 +71,7 @@ class MatTable extends React.Component {
                         this.props.data.map((rowData, idx) =>
                             <TableRow key={idx} background-color="green">
                                 <TableRowColumn>
-                                    <a href="/#">
+                                    <a href="/details">
                                         {rowData.name}
                                     </a>
                                 </TableRowColumn>
