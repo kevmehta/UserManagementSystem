@@ -9,6 +9,7 @@ import {
 } from 'material-ui/Table';
 import Toggle from 'material-ui/Toggle';
 import MatDialog from '../header/MatDialog';
+import { Link } from 'react-router-dom';
 
 
 const dateConverter = (date) => {
@@ -71,9 +72,7 @@ class MatTable extends React.Component {
                         this.props.data.map((rowData, idx) =>
                             <TableRow key={idx} background-color="green">
                                 <TableRowColumn>
-                                    <a href="/details">
-                                        {rowData.name}
-                                    </a>
+                                    <Link to={{ pathname: '/details', state: { user: rowData } }}>{rowData.name}</Link>
                                 </TableRowColumn>
                                 <TableRowColumn>{rowData.email}</TableRowColumn>
                                 <TableRowColumn>{rowData.phone}</TableRowColumn>
